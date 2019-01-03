@@ -1,14 +1,13 @@
 function joinNs(endpoint) {
-  if (nsSocket){
-  // check to see if nsSocket exists
+  if (nsSocket) {
+    // check to see if nsSocket exists
     nsSocket.close();
     // remove event listener for socket that is being closed.
-    document.querySelector('#user-input').removeEventListener('submit',formSubmission);
+    document.querySelector('#user-input').removeEventListener('submit', formSubmission);
   }
 
   nsSocket = io(`http://localhost:9000${endpoint}`);
   nsSocket.on('nsRoomLoad', (nsRooms) => {
-    // console.log(nsRooms);
     let roomList = document.querySelector('.room-list');
     roomList.innerHTML = '';
     nsRooms.forEach((room) => {
@@ -20,9 +19,7 @@ function joinNs(endpoint) {
     // add click listener to the rooms
     let roomNodes = document.getElementsByClassName('room');
     Array.from(roomNodes).forEach((elem) => {
-      // console.log('li- ', elem);
       elem.addEventListener('click', (e) => {
-        // console.log('someone clicked on', e.target.innerText);
         joinRoom(e.target.innerText);
       });
     });
@@ -31,7 +28,6 @@ function joinNs(endpoint) {
 
     const topRoom = document.querySelector('.room');
     const topRoomName = topRoom.innerText;
-    console.log(topRoomName);
     joinRoom(topRoomName);
 
 
@@ -39,15 +35,14 @@ function joinNs(endpoint) {
   });
 
   nsSocket.on('messageToClients', (msg) => {
-    console.log(msg);
     const newMsg = buildHTML(msg);
     document.querySelector('#messages').innerHTML += newMsg;
   });
 
-  document.querySelector('.message-form').addEventListener('submit',formSubmission);
+  document.querySelector('.message-form').addEventListener('submit', formSubmission);
 }
 
-function formSubmission (event) {
+function formSubmission(event) {
   event.preventDefault();
   const newMessage = document.querySelector('#user-message').value;
   nsSocket.emit('newMessageToServer', { text: newMessage });
