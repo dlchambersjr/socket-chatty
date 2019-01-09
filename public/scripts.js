@@ -1,36 +1,35 @@
+// Get the username and connect to the socket
 const username = prompt('What is your username');
-
-// const socket = io('http://localhost:9000');
 const socket = io('http://localhost:9000', {
   query: {
     username: username,
-  }
+  },
 });
 
 let nsSocket = '';
 
-// Listen for the list of namespaces
+// Listen for the list of namespaces to be provided via nsList
 socket.on('nsList', (nsData) => {
-  console.log('The list of namespaces has arrived');
-  // console.log(nsData);
+
+  // get the namespace element in the DOM and render the namespaces
   let namespacesDiv = document.querySelector('.namespaces');
   namespacesDiv.innerHTML = '';
   nsData.forEach((ns) => {
     namespacesDiv.innerHTML += `<div class="namespace" ns=${ns.endpoint}><img src="${ns.img}"/></div>`;
   });
 
-  // Add a click listener
-  console.log(document.getElementsByClassName('namespace'));
+  // Put the DOM elements into an array so a click eventlistener can be added to each.
   Array.from(document.getElementsByClassName('namespace')).forEach((elem) => {
-    // console.log(elem)
     elem.addEventListener('click', (e) => {
-      // console.log(e.target);
       const nsEndpoint = elem.getAttribute('ns');
-      // console.log(nsEndpoint, 'I should go to now');
+
+      // Join the targeted namespace when it is clicked.
       joinNs(nsEndpoint);
+
     });
   });
 
+  // Join the /wiki namespace as the default
   joinNs('/wiki');
 
 });
