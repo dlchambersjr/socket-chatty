@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "eslint": "^5.11.1",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "socket.io": "^2.2.0"
   }
 }
